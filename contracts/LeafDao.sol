@@ -4,6 +4,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts-upgradeable/governance/GovernorUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/governance/compatibility/GovernorCompatibilityBravoUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/governance/compatibility/IGovernorCompatibilityBravoUpgradeable.sol";
+// import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorTimelockCompoundUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeCastUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
@@ -13,7 +14,9 @@ import "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgrad
 /// @dev override some of the GovernorVotesUpgradeable functions in order to implement a logic based on Merkle Roots.
 /// This logic assumes hash collision to be highly unlikely
 
-contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompatibilityBravoUpgradeable, GovernorUpgradeable {
+contract LeafDao is Initializable, IGovernorCompatibilityBravoUpgradeable,  GovernorUpgradeable {
+    
+
     function __GovernorCompatibilityBravo_init() internal onlyInitializing {
     }
 
@@ -48,6 +51,16 @@ contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompat
     }
 
     // ============================================== Proposal lifecycle ==============================================
+
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) public virtual override returns (uint256) {
+        
+    }
 
     /**
      * @dev See {IGovernor-propose}.
@@ -85,12 +98,13 @@ contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompat
      */
     function queue(uint256 proposalId) public virtual override {
         ProposalDetails storage details = _proposalDetails[proposalId];
+        /*
         queue(
             details.targets,
             details.values,
             _encodeCalldata(details.signatures, details.calldatas),
             details.descriptionHash
-        );
+        );*/
     }
 
     /**
@@ -180,7 +194,6 @@ contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompat
         returns (
             uint256 id,
             address proposer,
-            uint256 eta,
             uint256 startBlock,
             uint256 endBlock,
             uint256 forVotes,
@@ -193,7 +206,6 @@ contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompat
         )
     {
         id = proposalId;
-        eta = proposalEta(proposalId);
         startBlock = proposalSnapshot(proposalId);
         endBlock = proposalDeadline(proposalId);
 
@@ -209,6 +221,26 @@ contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompat
         canceled = status == ProposalState.Canceled;
         executed = status == ProposalState.Executed;
     }
+
+    function proposals(uint256 proposalId)
+        public
+        view
+        virtual
+        override
+        returns (
+            uint256 id,
+            address proposer,
+            uint256 eta,
+            uint256 startBlock,
+            uint256 endBlock,
+            uint256 forVotes,
+            uint256 againstVotes,
+            uint256 abstainVotes,
+            bool canceled,
+            bool executed
+        ){
+            
+        }
 
     /**
      * @dev See {IGovernorCompatibilityBravo-getActions}.
@@ -331,6 +363,18 @@ contract LeafDao is Initializable, IGovernorTimelockUpgradeable, IGovernorCompat
             MerkleProofUpgradeable.verify(proof, _proposalDetails[proposalId].merkleRoot, leaf), "Invalid Merkle Proof."
         );
     }
+
+    function _getVotes(
+        address account,
+        uint256 blockNumber,
+        bytes memory params
+    ) internal view virtual override returns (uint256){}
+
+    function quorum(uint256 blockNumber) public view virtual override returns (uint256){}
+    
+    function votingDelay() public view virtual override returns (uint256){}
+
+    function votingPeriod() public view virtual override returns (uint256){}
 
 
     /**
