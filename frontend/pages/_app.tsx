@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import '@rainbow-me/rainbowkit/styles.css';
 import type { AppProps } from 'next/app';
-import { RainbowKitProvider, getDefaultWallets, midnightTheme } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
@@ -30,7 +30,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'RainbowKit App',
+  appName: 'Leaf DAO',
   chains,
 });
 
@@ -42,12 +42,14 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  
+
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
   }, []);
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} theme={midnightTheme()} >
+      <RainbowKitProvider chains={chains}  >
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>

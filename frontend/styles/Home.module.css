@@ -1,6 +1,6 @@
 .container {
   padding: 0 2rem;
-  background-image: linear-gradient(150deg, #FDC25B, #EE9448);
+  background-image: linear-gradient(150deg, #ebd7c7c9, #B5FF84, #cab5a5);
 }
 
 .main {
@@ -72,18 +72,15 @@
   text-align: left;
   color: inherit;
   text-decoration: none;
-  border: 1px solid #eaeaea;
-  border-radius: 10px;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid black;
+  
+
+  transition: color 0.55s ease, border-color 0.15s ease;
   max-width: 350px;
+
 }
 
-.card:hover,
-.card:focus,
-.card:active {
-  color: #0d76fc;
-  border-color: #0d76fc;
-}
+
 
 .card h2 {
   margin: 0 0 1rem 0;

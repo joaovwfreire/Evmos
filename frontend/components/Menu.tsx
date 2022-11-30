@@ -4,17 +4,27 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useState } from 'react';
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function NavBar() {
+  let [ menuBtn, setMenuBtn ] = useState(0);
 
+  const changeMenuBtn = async () => {
+    if(menuBtn){
+      setMenuBtn(0);
+    } else {
+      setMenuBtn(1);
+    }
+  }
   return (
     <Navbar  fixed="top" className='kkk' expand="lg">
         
         
       <Container fluid>
-        <Navbar.Brand   >
+        <Navbar.Brand  >
+          
         <svg width="114" height="38" viewBox="0 0 171 57" className='mx-3' fill="none" xmlns="http://www.w3.org/2000/svg">
 <g opacity="0.2" filter="url(#filter0_f_1302_130)">
 <path d="M8.592 53.76V36H4.488V53.76H8.592ZM24.1901 42.912C24.1901 42.528 24.1661 42.128 24.1181 41.712H14.8301C14.8941 40.88 15.1581 40.24 15.6221 39.792C16.1021 39.36 16.6861 39.144 17.3741 39.144C18.3981 39.144 19.1101 39.576 19.5101 40.44H23.8781C23.6541 39.56 23.2461 38.768 22.6541 38.064C22.0781 37.36 21.3501 36.808 20.4701 36.408C19.5901 36.008 18.6061 35.808 17.5181 35.808C16.2061 35.808 15.0381 36.088 14.0141 36.648C12.9901 37.208 12.1901 38.008 11.6141 39.048C11.0381 40.088 10.7501 41.304 10.7501 42.696C10.7501 44.088 11.0301 45.304 11.5901 46.344C12.1661 47.384 12.9661 48.184 13.9901 48.744C15.0141 49.304 16.1901 49.584 17.5181 49.584C18.8141 49.584 19.9661 49.312 20.9741 48.768C21.9821 48.224 22.7661 47.448 23.3261 46.44C23.9021 45.432 24.1901 44.256 24.1901 42.912ZM19.9901 43.992C19.9901 44.696 19.7501 45.256 19.2701 45.672C18.7901 46.088 18.1901 46.296 17.4701 46.296C16.7821 46.296 16.1981 46.096 15.7181 45.696C15.2541 45.296 14.9661 44.728 14.8541 43.992H19.9901ZM25.5392 42.72C25.5392 44.096 25.7952 45.304 26.3072 46.344C26.8352 47.384 27.5472 48.184 28.4432 48.744C29.3392 49.304 30.3392 49.584 31.4432 49.584C32.3872 49.584 33.2112 49.392 33.9152 49.008C34.6352 48.624 35.1872 48.12 35.5712 47.496V49.392H39.6752V36H35.5712V37.896C35.1712 37.272 34.6112 36.768 33.8912 36.384C33.1872 36 32.3632 35.808 31.4192 35.808C30.3312 35.808 29.3392 36.088 28.4432 36.648C27.5472 37.224 26.8352 38.032 26.3072 39.072C25.7952 40.128 25.5392 41.344 25.5392 42.72ZM35.5712 42.696C35.5712 43.72 35.2832 44.528 34.7072 45.12C34.1472 45.712 33.4592 46.008 32.6432 46.008C31.8272 46.008 31.1312 45.712 30.5552 45.12C29.9952 44.544 29.7152 43.744 29.7152 42.72C29.7152 41.696 29.9952 40.88 30.5552 40.272C31.1312 39.68 31.8272 39.384 32.6432 39.384C33.4592 39.384 34.1472 39.68 34.7072 40.272C35.2832 40.864 35.5712 41.672 35.5712 42.696ZM49.3643 45.984H47.1562V36H43.0523V45.984H41.5643V49.392H43.0523V49.776C43.0523 51.424 43.5243 52.672 44.4683 53.52C45.4123 54.384 46.7963 54.816 48.6203 54.816C48.9243 54.816 49.1483 54.808 49.2923 54.792V51.312C48.5083 51.36 47.9563 51.248 47.6363 50.976C47.3163 50.704 47.1562 50.216 47.1562 49.512V49.392H49.3643V45.984ZM62.6906 52.848C64.4666 52.848 66.0186 52.496 67.3466 51.792C68.6746 51.088 69.6986 50.096 70.4186 48.816C71.1546 47.552 71.5226 46.088 71.5226 44.424C71.5226 42.776 71.1546 41.312 70.4186 40.032C69.6986 38.752 68.6666 37.76 67.3226 37.056C65.9946 36.352 64.4506 36 62.6906 36H56.3786V52.848H62.6906ZM62.4266 39.552C63.9786 39.552 65.1866 39.976 66.0506 40.824C66.9146 41.672 67.3466 42.872 67.3466 44.424C67.3466 45.976 66.9146 47.184 66.0506 48.048C65.1866 48.912 63.9786 49.344 62.4266 49.344H60.4826V39.552H62.4266ZM84.3041 38.976H78.0161L77.0081 36H72.7121L78.8081 52.848H83.5601L89.6561 36H85.3121L84.3041 38.976ZM83.2481 42.144L81.1601 48.312L79.0961 42.144H83.2481ZM99.4794 35.832C97.8954 35.832 96.4394 36.2 95.1114 36.936C93.7994 37.672 92.7514 38.696 91.9674 40.008C91.1994 41.336 90.8154 42.824 90.8154 44.472C90.8154 46.12 91.1994 47.6 91.9674 48.912C92.7514 50.224 93.7994 51.248 95.1114 51.984C96.4394 52.72 97.8954 53.088 99.4794 53.088C101.063 53.088 102.511 52.72 103.823 51.984C105.151 51.248 106.191 50.224 106.943 48.912C107.711 47.6 108.095 46.12 108.095 44.472C108.095 42.824 107.711 41.336 106.943 40.008C106.175 38.696 105.135 37.672 103.823 36.936C102.511 36.2 101.063 35.832 99.4794 35.832ZM99.4794 39.576C100.823 39.576 101.895 40.024 102.695 40.92C103.511 41.816 103.919 43 103.919 44.472C103.919 45.96 103.511 47.144 102.695 48.024C101.895 48.92 100.823 49.368 99.4794 49.368C98.1194 49.368 97.0314 48.928 96.2154 48.048C95.4154 47.168 95.0154 45.976 95.0154 44.472C95.0154 42.984 95.4154 41.792 96.2154 40.896C97.0314 40.016 98.1194 39.576 99.4794 39.576Z" fill="white"/>
@@ -60,7 +70,23 @@ function NavBar() {
 
 
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Toggle className='border-white' onClick={changeMenuBtn}>
+          {
+
+<div >
+              {menuBtn == 0 &&
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#263F2A" className="bi bi-menu-button-wide" viewBox="0 0 16 16">
+  <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v2A1.5 1.5 0 0 1 14.5 5h-13A1.5 1.5 0 0 1 0 3.5v-2zM1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-13z"/>
+  <path d="M2 2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm10.823.323-.396-.396A.25.25 0 0 1 12.604 2h.792a.25.25 0 0 1 .177.427l-.396.396a.25.25 0 0 1-.354 0zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2H1zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2h14zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+</svg>}
+{menuBtn == 1 &&
+  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#263F2A" className="bi bi-menu-button-fill" viewBox="0 0 16 16">
+  <path d="M1.5 0A1.5 1.5 0 0 0 0 1.5v2A1.5 1.5 0 0 0 1.5 5h8A1.5 1.5 0 0 0 11 3.5v-2A1.5 1.5 0 0 0 9.5 0h-8zm5.927 2.427A.25.25 0 0 1 7.604 2h.792a.25.25 0 0 1 .177.427l-.396.396a.25.25 0 0 1-.354 0l-.396-.396zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2H1zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2h14zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+</svg>
+}
+</div>
+}
+</Navbar.Toggle>
         <Navbar.Collapse className='justify-content-center' id="navbarScroll">
           <Nav
             className=" my-2 my-lg-0 "
@@ -68,7 +94,8 @@ function NavBar() {
             navbarScroll
           >
             <Nav.Link href="/" ><button className='kk fw-bold text-white'>Home</button></Nav.Link>
-            <Nav.Link href="/about" ><button className='kk fw-bold text-white'>About Us</button></Nav.Link>
+            <Nav.Link href="/about" ><button className='kk fw-bold text-white'>About</button></Nav.Link>
+            <Nav.Link href="/snapshot" ><button className='kk fw-bold text-white'>Snapshot</button></Nav.Link>
             <Nav.Link href="/governance" ><button className='kk fw-bold text-white'>Governance</button></Nav.Link>
             <Nav.Link href="/admin" ><button className='kk fw-bold text-white'>Admin</button></Nav.Link>
             <Nav.Link href="/contact" ><button className='kk fw-bold text-white'>Contact</button></Nav.Link>
@@ -77,8 +104,100 @@ function NavBar() {
           </Nav>
          
           
-          <div className="pt-2">
-            <ConnectButton/>
+          <div className='ms-auto mx-4'>
+          <ConnectButton.Custom >
+  {({
+    account,
+    chain,
+    openAccountModal,
+    openChainModal,
+    openConnectModal,
+    authenticationStatus,
+    mounted,
+  }) => {
+    // Note: If your app doesn't use authentication, you
+    // can remove all 'authenticationStatus' checks
+    const ready = mounted && authenticationStatus !== 'loading';
+    const connected =
+      ready &&
+      account &&
+      chain &&
+      (!authenticationStatus ||
+        authenticationStatus === 'authenticated');
+
+    return (
+      <div
+        {...(!ready && {
+          'aria-hidden': true,
+          'style': {
+            opacity: 0,
+            pointerEvents: 'none',
+            userSelect: 'none',
+          },
+        })}
+      >
+        {(() => {
+          if (!connected) {
+            return (
+              <button onClick={openConnectModal} className ="kk fw-bold text-white">
+                Connect Wallet
+              </button>
+            );
+          }
+
+          if (chain.unsupported) {
+            return (
+              <button onClick={openChainModal}className ="kk fw-bold text-white">
+                Wrong network
+              </button>
+            );
+          }
+
+          return (
+            <div style={{ display: 'flex', gap: 12 }} >
+              <button
+                onClick={openChainModal}
+                style={{ display: 'flex', alignItems: 'center' }}
+                className ="chainbox fw-bold text-white "
+              >
+                {chain.hasIcon && (
+                  <div
+                    style={{
+                      background: chain.iconBackground,
+                      width: 24,
+                      height: 24,
+                      borderRadius: 999,
+                      overflow: 'hidden',
+                      marginRight: 4,
+                    }}
+                  >
+                    {chain.iconUrl && (
+                      <img
+                        alt={chain.name ?? 'Chain icon'}
+                        src={chain.iconUrl}
+                        style={{ width: 24, height: 24 }}
+                      />
+                    )}
+                  </div>
+                )}
+                {chain.name}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-chevron-down mt-1" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+</svg>
+              </button>
+              <button onClick={openAccountModal} className ="kk fw-bold text-white">
+                {account.displayName}
+                {account.displayBalance
+                  ? ` (${account.displayBalance})`
+                  : ''}
+              </button>
+            </div>
+          );
+        })()}
+      </div>
+    );
+  }}
+</ConnectButton.Custom>
             </div>
         </Navbar.Collapse>
       </Container>
