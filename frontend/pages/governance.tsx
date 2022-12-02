@@ -1,11 +1,41 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
+import { Col, Row } from 'react-bootstrap';
 import Head from 'next/head';
 import Footer from '../components/Footer';
 import NavBar from '../components/Menu';
 import styles from '../styles/Home.module.css';
+import { useEffect, useState } from 'react';
+import Select from 'react-select';
 
 const Home: NextPage = () => {
+
+  const Countries = [
+    { label: "Proposal #001", value: 1 },
+    { label: "Proposal #002", value: 2 },
+    { label: "Proposal #003", value: 3 },
+    { label: "Proposal #004", value: 4 },
+    { label: "Proposal #005", value: 5 },
+    { label: "Proposal #006", value: 6 },
+    { label: "Proposal #007", value: 7 },
+    { label: "Proposal #008", value: 8 },,
+    { label: "Proposal #009", value: 9 },
+  ];
+
+  let [proposal, setProposal] = useState("Proposal list")
+
+  const registrationModal = e => {
+    e.preventDefault();
+  }
+
+  const accessButton = e => {
+    e.preventDefault();
+  }
+
+  const changeProposal = async (proposalNumber: number) =>{
+    setProposahl(`Proposal #00${proposalNumber}`)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -23,54 +53,101 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Governance
         </h1>
+        
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
+        <Row>
+        
+        <Col className='about-container bg-transparent p-5 m-5'>
+          <h2>Proposals</h2>
+          <hr/>
+        <form>
 
-        <div className={styles.grid}>
-          <a href="https://rainbowkit.com" className={styles.card}>
-            <h2>RainbowKit Documentation &rarr;</h2>
-            <p>Learn how to customize your wallet connection flow.</p>
-          </a>
+  <label for="inputAddress" className="form-label fw-bold text-black">Find all proposals by number</label>
+        
+  <select  aria-label="Default select example" className=" form-select text-dark  fw-bold  border-round form-input-bg">
+  <option value="0" selected>Proposal #001</option>
+  <option value="1">Proposal #002</option>
+  <option value="2">Proposal #003</option>
+  <option value="3">Proposal #004</option>
+  <option value="4">Proposal #005</option>
+  <option value="5">Proposal #006</option>
+  <option value="6">Proposal #007</option>
+  <option value="7">Proposal #008</option>
+  <option value="8">Proposal #009</option>
 
-          <a href="https://wagmi.sh" className={styles.card}>
-            <h2>wagmi Documentation &rarr;</h2>
-            <p>Learn how to interact with Ethereum.</p>
-          </a>
+</select>
+<div id="tokenAddressHelp" className="form-text text-dark fw-bold">Ordered from first to last.</div>
 
-          <a
-            href="https://github.com/rainbow-me/rainbowkit/tree/main/examples"
-            className={styles.card}
-          >
-            <h2>RainbowKit Examples &rarr;</h2>
-            <p>Discover boilerplate example RainbowKit projects.</p>
-          </a>
+  <button type="submit" className="kk fw-bold text-white my-2" onClick={accessButton}>Access</button>
+</form>
+        
+      
 
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Next.js Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        </Col>
+        </Row>
+        <Row>
+        <Col className='about-container bg-transparent p-5 m-5'>
+          <h2 >Governors</h2>
+          <hr/>
+        <form>
+        <table className="table table-secondary border border-success border-1  table-striped">
+        <thead>
+    <tr>
+      <th scope="col">Number</th>
+      <th scope="col">Address</th>
+      <th scope="col">Start</th>
+      <th scope="col">End </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
+      <td>05/24/21</td>
+      <td>01/24/22</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
+      <td>03/24/21</td>
+      <td>01/24/22</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
+      <td>01/24/21</td>
+      <td>01/24/22</td>
+    </tr>
+    <tr>
+      <th scope="row">4</th>
+      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
+      <td>01/24/21</td>
+      <td>01/24/22</td>
+    </tr>
+    <tr>
+      <th scope="row">5</th>
+      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
+      <td>01/24/21</td>
+      <td>01/24/22</td>
+    </tr>
+    <tr>
+      <th scope="row">6</th>
+      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
+      <td>01/24/21</td>
+      <td>01/24/22</td>
+    </tr>
+  </tbody>
+</table>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Next.js Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+  <button type="submit" className="kk fw-bold text-white my-2" id='registrationButton' onClick={registrationModal}>Apply</button>
+</form>
+        
+       
+        </Col>
+        </Row>
+        
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        
       </main>
 
       <Footer/>

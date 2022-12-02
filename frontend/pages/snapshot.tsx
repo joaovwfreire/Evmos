@@ -50,19 +50,25 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Snapshot
         </h1>
+        
 
         <Row className='container-home '>
         <Col className='homeBox p-5 m-2'>
+          <h2>
+            Start a proposal
+          </h2>
+          
         <form>
+        <hr/>
   <div className="mb-4">
     <label for="inputAddress" className="form-label fw-bold text-black">DAO Token address</label>
     <input type="text" className="form-control form-input-bg text-black fw-bold" id="inputAddress" aria-describedby="tokenAddressHelp"/>
-    <div id="tokenAddressHelp" className="form-text text-black fw-bold">Address of the governance ERC-20 token.</div>
+    <div id="tokenAddressHelp" className="form-text text-secondary fw-bold">Address of the governance ERC-20 token.</div>
   </div>
   <div className="mb-4">
     <label for="inputBlockNumber" className="form-label fw-bold text-black">BlockNumber</label>
     <input type="text" className="form-control form-input-bg text-black fw-bold" id="inputBlockNumber" aria-describedby='blockNumberHelp'/>
-    <div id="blockNumberHelp" className="form-text text-black fw-bold">Block Number to generate token balances snapshot.</div>
+    <div id="blockNumberHelp" className="form-text text-secondary fw-bold">Block Number to generate token balances snapshot.</div>
   </div>
   <button type="submit" className="kk fw-bold text-white my-3 mb-5">Generate Hash</button>
   <div className="mb-4">
@@ -71,6 +77,8 @@ const Home: NextPage = () => {
   </div>
 
   <button type="submit" className="kk fw-bold text-white">Submit</button>
+  <label for="inputRootHash" className="form-label fw-bold text-secondary" >Click the submit button to start a new proposal based on the snapshot</label>
+   
 </form>
         </Col>
         </Row>
