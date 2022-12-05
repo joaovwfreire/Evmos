@@ -1,6 +1,6 @@
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useEffect, useState } from 'react';
-import LeafDaoGovernorBravoDelegate from '../../artifacts/contracts/LeafDaoGovernorBravo.sol/LeafDAOGovernorBravoDelegate.json';
+import LeafDaoGovernorBravoDelegate from '../abi/contracts/LeafDaoGovernorBravo.sol/LeafDAOGovernorBravoDelegate.json'
 
 const chainId = process.env.CHAIN_ID as string;
 
