@@ -2,28 +2,40 @@ import '../styles/globals.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import '@rainbow-me/rainbowkit/styles.css';
 import type { AppProps } from 'next/app';
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { Chain, RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { useEffect } from 'react';
 
+const evmosChain: Chain = {
+  id: 9000,
+  name: 'Evmos Testnet',
+  network: 'evmos testnet',
+  iconUrl: '',
+  iconBackground: '#fff',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Testnet EVMOS',
+    symbol: 'tEVMOS',
+  },
+  rpcUrls: {
+    default: 'https://eth.bd.evmos.dev:8545',
+  },
+  blockExplorers: {
+    default: { name: 'Block Explorer', url: 'https://evm.evmos.dev' }
+  },
+  testnet: true,
+};
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [
-    chain.mainnet,
-    chain.polygon,
-    chain.optimism,
-    chain.arbitrum,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [chain.goerli]
-      : []),
+  [evmosChain
   ],
   [
     alchemyProvider({
       // This is Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
-      apiKey: '_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC',
+      apiKey: process.env.ALCHEMY_KEY as string,
     }),
     publicProvider(),
   ]
@@ -40,6 +52,7 @@ const wagmiClient = createClient({
   provider,
   webSocketProvider,
 });
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   

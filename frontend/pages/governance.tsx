@@ -4,6 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import Head from 'next/head';
 import Footer from '../components/Footer';
 import NavBar from '../components/Menu';
+import Leaves from '../components/Leaves';
 import styles from '../styles/Home.module.css';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
@@ -24,16 +25,16 @@ const Home: NextPage = () => {
 
   let [proposal, setProposal] = useState("Proposal list")
 
-  const registrationModal = e => {
+  const registrationModal = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
   }
 
-  const accessButton = e => {
+  const accessButton = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
   }
 
   const changeProposal = async (proposalNumber: number) =>{
-    setProposahl(`Proposal #00${proposalNumber}`)
+    setProposal(`Proposal #00${proposalNumber}`)
   }
 
   return (
@@ -49,20 +50,23 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <NavBar />
-
+        <Leaves/>
         <h1 className={styles.title}>
           Governance
         </h1>
+        <h2 className='text-danger'>
+          Not currently built
+        </h2>
         
 
         <Row>
         
-        <Col className='about-container bg-transparent p-5 m-5'>
+        <Col className='about-container  p-5 m-5'>
           <h2>Proposals</h2>
           <hr/>
         <form>
 
-  <label for="inputAddress" className="form-label fw-bold text-black">Find all proposals by number</label>
+  <label className="form-label fw-bold text-black">Find all proposals by number</label>
         
   <select  aria-label="Default select example" className=" form-select text-dark  fw-bold  border-round form-input-bg">
   <option value="0" selected>Proposal #001</option>
@@ -84,56 +88,54 @@ const Home: NextPage = () => {
       
 
         </Col>
-        </Row>
-        <Row>
-        <Col className='about-container bg-transparent p-5 m-5'>
+   
+        <Col className='about-container  p-5 m-5'>
           <h2 >Governors</h2>
           <hr/>
         <form>
         <table className="table table-secondary border border-success border-1  table-striped">
         <thead>
     <tr>
-      <th scope="col">Number</th>
       <th scope="col">Address</th>
-      <th scope="col">Start</th>
+
       <th scope="col">End </th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">1</th>
-      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
-      <td>05/24/21</td>
+
+      <td>0xB...D7b</td>
+
       <td>01/24/22</td>
     </tr>
     <tr>
-      <th scope="row">2</th>
-      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
-      <td>03/24/21</td>
+
+      <td>0xB...D7b</td>
+
       <td>01/24/22</td>
     </tr>
     <tr>
-      <th scope="row">3</th>
-      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
-      <td>01/24/21</td>
+
+      <td>0xB...D7b</td>
+
       <td>01/24/22</td>
     </tr>
     <tr>
-      <th scope="row">4</th>
-      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
-      <td>01/24/21</td>
+
+      <td>0xB...D7b</td>
+
       <td>01/24/22</td>
     </tr>
     <tr>
-      <th scope="row">5</th>
-      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
-      <td>01/24/21</td>
+
+      <td>0xB...D7b</td>
+
       <td>01/24/22</td>
     </tr>
     <tr>
-      <th scope="row">6</th>
-      <td>0xB0230C3F2B406F84215D6d76118B22F79CdB4D7b</td>
-      <td>01/24/21</td>
+
+      <td>0xB...D7b</td>
+
       <td>01/24/22</td>
     </tr>
   </tbody>

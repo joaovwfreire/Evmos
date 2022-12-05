@@ -97,7 +97,6 @@ function NavBar() {
             <Nav.Link href="/about" ><button className='kk fw-bold text-white'>About</button></Nav.Link>
             <Nav.Link href="/snapshot" ><button className='kk fw-bold text-white'>Snapshot</button></Nav.Link>
             <Nav.Link href="/governance" ><button className='kk fw-bold text-white'>Governance</button></Nav.Link>
-            <Nav.Link href="/admin" ><button className='kk fw-bold text-white'>Admin</button></Nav.Link>
             <Nav.Link href="/contact" ><button className='kk fw-bold text-white'>Contact</button></Nav.Link>
         
             
@@ -172,10 +171,12 @@ function NavBar() {
                     }}
                   >
                     {chain.iconUrl && (
-                      <img
+                      <Image
                         alt={chain.name ?? 'Chain icon'}
                         src={chain.iconUrl}
-                        style={{ width: 24, height: 24 }}
+                       
+                        width='24px'
+                        height='24px'
                       />
                     )}
                   </div>

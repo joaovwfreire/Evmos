@@ -1,6 +1,9 @@
 .container {
   padding: 0 2rem;
-  background-image: linear-gradient(150deg, #ebd7c7c9, #B5FF84, #cab5a5);
+  background-image: linear-gradient(150deg, #e9ece9, #B5FF84, #e9ece9);
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
 }
 
 .main {
@@ -9,8 +12,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
+  
   
 }
 
@@ -21,6 +25,8 @@
   border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .footer a {
@@ -64,6 +70,10 @@
   justify-content: center;
   flex-wrap: wrap;
   max-width: 800px;
+  position: relative;
+  z-index: 2;
+  background-color: #e9ece9;
+  
 }
 
 .card {

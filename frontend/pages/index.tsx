@@ -1,8 +1,10 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import Footer from '../components/Footer';
 import NavBar from '../components/Menu';
+import Leaves from '../components/Leaves';
 import { Col, Row } from 'react-bootstrap';
 import styles from '../styles/Home.module.css';
 
@@ -20,11 +22,11 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <NavBar />
-        
-        <h1 className='fw-bold'>Decentralized autonomous organizations tools</h1>
-        <h4 className='text-secondary '>This project is an EVMOS X Encode Hackathon submission. The code has not gone  </h4>
-        <div className='d-inline-block'><h4 className='text-danger '> through auditing processes and should be carefully evaluated before going into production. </h4> </div>
-        <div className='about-container p-3 bg-transparent'>
+        <Leaves/>
+        <h1 className='fw-bold mt-5'>Decentralized autonomous organizations tools</h1>
+        <h4 className='text-secondary '>Governance tooling deployed at EVMOS testnet  </h4>
+        <div className='d-inline-block'><h4 className='text-success '> An EVMOS - Covalent - Encode Hackathon submission. </h4> </div>
+        <div className='about-container p-3'>
         <Row className='container-home'>
         <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
   <div className="carousel-indicators">
@@ -38,7 +40,7 @@ const Home: NextPage = () => {
   <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13Z"/>
 </svg>
       <div className="carousel-caption d-md-block text-white fw-bold">
-        <h4 className=' pb-5 fw-bold fix-margin'><a href="/governance" className='text-white'>Governance</a></h4>
+        <h4 className=' pb-5 fw-bold fix-margin'><Link href="/governance" className='text-white'>Governance</Link></h4>
         <div className='
         mb-3'></div>
       </div>
@@ -48,7 +50,7 @@ const Home: NextPage = () => {
   <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
 </svg>
       <div className="carousel-caption d-md-block text-white  fw-bold">
-        <h4 className='mb-4 fw-bold'><a href="/snapshot" className='text-white'>Snapshots</a></h4>
+        <h4 className='mb-4 fw-bold'><Link href="/snapshot" className='text-white'>Snapshots</Link></h4>
         
       </div>  
     </div>
@@ -59,8 +61,8 @@ const Home: NextPage = () => {
 </svg>
 
       <div className="carousel-caption d-md-block text-white mb-5 pb-5 fw-bold">
-        <h4 className='fw-bold'><a href="/contact" className='text-white'>Improve</a></h4>
-        <p>Your DAO's representativity with easy to use and cost-effective tooling!</p>
+        <h4 className='fw-bold'><Link href="/contact" className='text-white'>Improve</Link></h4>
+        <p>Your DAO`s representativity with easy to use and cost-effective tooling!</p>
       </div>
     </div>
   </div>

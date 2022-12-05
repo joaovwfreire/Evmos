@@ -1,8 +1,10 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import Footer from '../components/Footer';
 import NavBar from '../components/Menu';
+import Leaves from '../components/Leaves';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
@@ -18,55 +20,76 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        
         <NavBar />
+        <Leaves/>
         <h1 className={styles.title}>
           About the project
         </h1>
-        <div className='about-container bg-transparent'>
+        <div className='about-container '>
         
         <div className=''>
         <div className={styles.grid}>
           <div className={styles.card}>
             <h2>Leaf DAO </h2>
-            <p>was built in 10 days for the <br/> Encode X Evmos Hackathon.</p>
+            <p>was built in 10 days for the <br/> Evmos-Covalent Hackathon.</p>
           </div>
 
-          <a href="https://github.com/joaovwfreire" target='_blank' className={styles.card}>
-            <h2>JoVi</h2>
-            <p>This project has been solo developed by Joao Freire (JoVi) - <br/> a 24-year-old brazilian developer.</p>
-          </a>
+          <div className={styles.card}>
+          <h2>
+          <Link href="https://github.com/joaovwfreire" target='_blank' rel='noreferrer'>
 
-          <a
-            href="https://github.com/rainbow-me/rainbowkit/tree/main/examples"
-            target='_blank'
+            JoVi
+
+          </Link>
+          </h2>
+          <p>This project has been solo developed by Joao Freire (JoVi) - <br/> a 24-year-old brazilian developer.</p>
+          </div>
+
+          <div
+           
             className={styles.card}
           >
             <h2>Merkle tree</h2>
-            <p>This project stores wallet addresses' voting power snapshots by utilizing Merkle Trees </p>
-          </a>
-
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Next.js &rarr;</h2>
-            <p>was the go-to framework for <br/>this frontend.</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
+            <p>This project stores wallet addresses` voting power snapshots by utilizing Merkle Trees </p>
+          </div>
+          <div className={styles.card}>
+          <h2>
+          <Link href="https://nextjs.org/docs" target='_blank' rel='noreferrer'>
+            Next.js
+            
+          </Link>
+          </h2>
+          <p>is the go-to framework for <br/>this frontend.</p>
+          </div>
+          <div className={styles.card}>
+          <h2>
+          <Link
+            href="https://www.rainbowkit.com/"
+            
+            target='_blank' rel='noreferrer'
           >
-            <h2>Rainbow Kit</h2>
-            <p>Was used to enable wallet connection.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
+            Rainbow Kit
+            
+          </Link>
+          </h2>
+          <p>Was used to enable wallet connection.</p>
+          </div>
+          <div className={styles.card}>
+          <h2>
+          <Link
+            href="https://github.com/compound-finance/compound-protocol/tree/master/contracts/Governance"
+            target='_blank' rel='noreferrer'
           >
-            <h2>OpenZeppelin GovernorBravo </h2>
-            <p>
-              Was used as the framework for this DAO's voting system and governance logic.
+            GovernorBravo 
+            
+          </Link>
+          </h2>
+          <p>
+              Was used as the framework for this DAO`s voting system and governance logic.
             </p>
-          </a>
+            </div>
+
         </div>
         </div>
         </div>
