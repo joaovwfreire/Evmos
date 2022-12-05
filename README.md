@@ -2,7 +2,7 @@
 
 ### EVMOS Testnet:
 LDAO token address : 0x9C022fb117fDE22dBe15480f6dEc4d8946545E3B
-LDAO address: 0x52F67De5272482fF8BAC095847faB7f0D355E7db
+LDAO address: 0x21fA1bEf12E24a3712D139D2d3C5cb2cEc85A0Ba
 
 ## Introduction
 
