@@ -1,29 +1,195 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](https://github.com/rainbow-me/rainbowkit/tree/main/packages/create-rainbowkit).
+# Leaf DAO - EVMOS - Covalent - Encode Hackathon
 
-## Getting Started
+### EVMOS Testnet:
+LDAO token address : 0x9C022fb117fDE22dBe15480f6dEc4d8946545E3B
+LDAO address: 0x21fA1bEf12E24a3712D139D2d3C5cb2cEc85A0Ba
 
-First, run the development server:
+## Introduction
 
-```bash
-npm run dev
+Leaf DAO was built as my personal submission for the EVMOS - Covalent - Encode Hackkathon.
+If this repo provides any useful insight, interesting approach or simply help you on something, please leave a star! =) 
+
+## The logic
+
+This DAO system implements the Governor Bravo governance standard. For the demo, I have integrated the following features at the frontend: proposal creation, balances snapshot, proposal state, proposal actions and vote casting.
+
+### Snapshot
+
+The snapshot feature utilizes Covalent’s API services for Snapshot tooling to compute token balances at any given block as voting power. The information is converted into Smart-Contract interpreted data through a single transaction with Merkle Trees.
+
+By iterating through an array of addresses and it’s balances at a given block height through Covalent’s endpoints, a Merkle Tree and it’s root can be generated.
+
+```tsx
+const dataMapping = data.map((x:any) => 
+      ethers.utils.solidityKeccak256(
+        ["address", "uint256"], [x.address, x.balance]));
+        
+      const merkleTree = new MerkleTree(dataMapping, keccak256, { sort: true });
+
+      // Generate the root 
+      const root = merkleTree.getHexRoot();
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+With the Merkle Tree created, we can now pass it’s root and the snapshot block number as arguments for a propose function call at the governance smart contract.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```solidity
+function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description, uint snapshotBlockNumber, bytes32 merkleRoot) public returns (uint) {
+        // Reject proposals before initiating as Governor
+        require(initialProposalId != 0, "GovernorBravo::propose: Governor Bravo not active");
+        // Allow addresses above proposal threshold and whitelisted addresses to propose
+        require(ldao.getPriorVotes(msg.sender, sub256(block.number, 1)) > proposalThreshold || isWhitelisted(msg.sender), "GovernorBravo::propose: proposer votes below proposal threshold");
+        require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "GovernorBravo::propose: proposal function information arity mismatch");
+        require(targets.length != 0, "GovernorBravo::propose: must provide actions");
+        require(targets.length <= proposalMaxOperations, "GovernorBravo::propose: too many actions");
 
-## Learn More
+        uint latestProposalId = latestProposalIds[msg.sender];
+        if (latestProposalId != 0) {
+          ProposalState proposersLatestProposalState = state(latestProposalId);
+          require(proposersLatestProposalState != ProposalState.Active, "GovernorBravo::propose: one live proposal per proposer, found an already active proposal");
+          require(proposersLatestProposalState != ProposalState.Pending, "GovernorBravo::propose: one live proposal per proposer, found an already pending proposal");
+        }
 
-To learn more about this stack, take a look at the following resources:
+        uint startBlock = add256(block.number, votingDelay);
+        uint endBlock = add256(startBlock, votingPeriod);
 
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
+        proposalCount++;
+        uint newProposalID = proposalCount;
+        Proposal storage newProposal = proposals[newProposalID];
+        // This should never happen but add a check in case.
+        require(newProposal.id == 0, "GovernorBravo::propose: ProposalID collsion");
+        newProposal.id = newProposalID;
+        newProposal.proposer = msg.sender;
+        newProposal.eta = 0;
+        newProposal.targets = targets;
+        newProposal.values = values;
+        newProposal.signatures = signatures;
+        newProposal.calldatas = calldatas;
+        newProposal.startBlock = startBlock;
+        newProposal.endBlock = endBlock;
+        newProposal.forVotes = 0;
+        newProposal.againstVotes = 0;
+        newProposal.abstainVotes = 0;
+        newProposal.canceled = false;
+        newProposal.executed = false;
+        newProposal.snapshotBlockNumber = snapshotBlockNumber;
+        newProposal.merkleRoot = merkleRoot;
 
-You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
+        latestProposalIds[newProposal.proposer] = newProposal.id;
 
-## Deploy on Vercel
+        emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, description );
+        return newProposal.id;
+    }
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This root is used to validate any proposal vote, as it checks whether the vote amount sent by a user is true or false. 
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+All the hashes generated by a block snapshot at a certain time are processed and generate a Merkle Tree that will act as the main access control for voting.
+
+```solidity
+/**
+      * @notice Cast a vote for a proposal
+      * @param proposalId The id of the proposal to vote on
+      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+      */
+    function castVote(uint proposalId, uint8 support, uint snapshotBalance, bytes32[] memory proof) external {
+        require(voteChecks(proposalId, snapshotBalance, proof, msg.sender), "Voting checks failed");
+        emit VoteCast(msg.sender, proposalId, support, castVoteInternal(msg.sender, proposalId, support, snapshotBalance), "");
+
+    }
+
+		 function voteChecks(uint proposalId, uint snapshotBalance, bytes32[] memory proof, address user) internal returns (bool){
+        Proposal storage proposal = proposals[proposalId];
+        bytes32 leaf = merkleTreeVerification(user, snapshotBalance, proof, proposalId);
+        require(proposal.leafUsed[leaf] == false, "Vote already cast");
+        proposal.leafUsed[leaf] = true;
+        return true;
+    }
+
+			function merkleTreeVerification(address account, uint256 _weight, bytes32[] memory proof, uint256 proposalId) internal view returns(bytes32) {
+        bytes32 leaf = keccak256(abi.encodePacked(account, _weight));
+
+        require(
+            MerkleProofUpgradeable.verify(proof, proposals[proposalId].merkleRoot, leaf), "Invalid Merkle Proof."
+        );
+
+        return leaf;
+    }
+```
+
+## User experience
+
+The DAO election’s host will receive the generated Merkle Tree hash, but won’t be able to manipulate it. The only option is to send this variable as a transaction argument, hence deploying one of the access control mechanics for the DAO. 
+
+When voting by using the production frontend, a user with proper authorization will be able to push the transaction without any reversion. That hash to vote number logic will be figured by the front-end as the Façade design pattern is a must for such conceptually complex operation for non specialists. It works by fetching the balances from the proposal-set block height , when users pick a proposal number.
+
+That will allow the dApp to recreate the hash accepted by the Merkle Tree and it’s proof.
+Considering hash collisions are highly unlikely, this is a currently considered a good security mechanism to prevent double vote casting. 
+
+As a second fail-safe, a mapping that only allows a certain hash to compute vote once was implemented. It guarantees minimum governance manipulation in case a collision happens.
+
+If a user attempts to vote twice, it won’t pass the mapping check.
+
+```solidity
+function voteChecks(uint proposalId, uint snapshotBalance, bytes32[] memory proof, address user) internal returns (bool){
+        Proposal storage proposal = proposals[proposalId];
+        bytes32 leaf = merkleTreeVerification(user, snapshotBalance, proof, proposalId);
+        require(proposal.leafUsed[leaf] == false, "Vote already cast");
+        proposal.leafUsed[leaf] = true;
+        return true;
+    }
+```
+
+
+## Slither relevant issues 
+
+Run slither with
+
+```
+python3 tools/slither.py
+```
+
+The following issues are found when slyther static-analysis tool is run at the smart contracts. Even though all have high or medium severity, it was opted not to address those due to the context in which the function calls are used.
+
+Check: arbitrary-send-eth
+Severity: High
+Confidence: Medium
+
+```
+LeafDAOGovernorBravoDelegate.execute(uint256) (contracts/LeafDaoGovernorBravo.sol#148-156) sends eth to arbitrary user
+        Dangerous calls:
+        - timelock.executeTransaction{value: proposal.values[i]}(proposal.targets[i],proposal.values[i],proposal.signatures[i],proposal.calldatas[i],proposal.eta) (contracts/LeafDaoGovernorBravo.sol#153)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#functions-that-send-ether-to-arbitrary-destinations
+```
+
+Check: incorrect-equality
+Severity: Medium
+Confidence: High
+
+```
+Comp._writeCheckpoint(address,uint32,uint96,uint96) (contracts/Comp.sol#262-273) uses a dangerous strict equality:
+        - nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber (contracts/Comp.sol#265)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+```
+
+Check: reentrancy-no-eth
+Severity: Medium
+Confidence: Medium
+
+```
+Reentrancy in LeafDAOGovernorBravoDelegate._initiate(address) (contracts/LeafDaoGovernorBravo.sol#384-390):
+        External calls:
+        - proposalCount = GovernorAlpha(governorAlpha).proposalCount() (contracts/LeafDaoGovernorBravo.sol#387)
+        State variables written after the call(s):
+        - initialProposalId = proposalCount (contracts/LeafDaoGovernorBravo.sol#388)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-1
+```
+
+Check: unused-return
+Severity: Medium
+Confidence: Medium
+
+```
+LeafDAOGovernorBravoDelegate.queueOrRevertInternal(address,uint256,string,bytes,uint256) (contracts/LeafDaoGovernorBravo.sol#139-142) ignores return value by timelock.queueTransaction(target,value,signature,data,eta) (contracts/LeafDaoGovernorBravo.sol#141)
+LeafDAOGovernorBravoDelegate.execute(uint256) (contracts/LeafDaoGovernorBravo.sol#148-156) ignores return value by timelock.executeTransaction{value: proposal.values[i]}(proposal.targets[i],proposal.values[i],proposal.signatures[i],proposal.calldatas[i],proposal.eta) (contracts/LeafDaoGovernorBravo.sol#153)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return
+```
